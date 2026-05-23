@@ -132,3 +132,27 @@ The app will be available at `https://localhost:7xxx` (check the console output 
 | Microsoft.EntityFrameworkCore.Tools | 8.0.8 |
 | Microsoft.EntityFrameworkCore.Design | 8.0.8 |
 | HtmlSanitizer | 9.0.892 |
+
+
+
+## Screenshots
+<img width="1919" height="970" alt="dashboard" src="https://github.com/user-attachments/assets/247248cf-b11a-46af-849b-532f36f5d344" />
+
+
+<img width="621" height="830" alt="login" src="https://github.com/user-attachments/assets/ab6fd40d-74ab-4b77-8569-d1e4eb92f2f8" />
+
+
+<img width="539" height="829" alt="register" src="https://github.com/user-attachments/assets/cd412c6c-a87f-48f7-a75d-bf8636e9d918" />
+
+
+<img width="1919" height="970" alt="home" src="https://github.com/user-attachments/assets/9a5d4bbd-64df-46b5-856f-90e5c5af444b" />
+
+
+<img width="1116" height="561" alt="allEntries" src="https://github.com/user-attachments/assets/2102ece2-cf3c-40f6-bbb3-392e0d24e561" />
+
+
+<img width="472" height="444" alt="profile" src="https://github.com/user-attachments/assets/e4d90047-fc7d-4456-8496-4586f11c6abf" />
+
+
+<img width="1133" height="430" alt="folders" src="https://github.com/user-attachments/assets/1c2e2ddb-4da2-46b1-8a2f-50bbc05d071d" />
+
