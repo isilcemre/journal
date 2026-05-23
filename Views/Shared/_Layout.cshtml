@@ -1,0 +1,671 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Akıllı Fotoğraf Günlüğü</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #FAF7F2;
+            font-family: 'DM Sans', sans-serif;
+            color: #2C2416;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── NAVBAR ── */
+        .site-navbar {
+            background: #FFFDF8;
+            border-bottom: 1px solid #E8DFD0;
+            padding: 0 1.5rem;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 8px rgba(44,36,22,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .site-navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            text-decoration: none;
+            color: #2C2416;
+        }
+
+        .site-navbar-brand-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: rgba(139,69,19,0.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .site-navbar-brand-name {
+            font-family: 'Lora', serif;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .site-navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .site-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 13px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6B5744;
+            text-decoration: none;
+            transition: background .15s, color .15s;
+        }
+
+            .site-nav-link:hover {
+                background: rgba(139,69,19,0.08);
+                color: #8B4513;
+                text-decoration: none;
+            }
+
+            .site-nav-link.active {
+                background: rgba(139,69,19,0.10);
+                color: #8B4513;
+            }
+
+        .site-navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 14px;
+            background: transparent;
+            border: 1.5px solid #D4956A;
+            border-radius: 50px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: #8B4513;
+            cursor: pointer;
+            transition: background .15s, box-shadow .15s;
+        }
+
+            .profile-btn:hover {
+                background: rgba(139,69,19,0.07);
+                box-shadow: 0 2px 8px rgba(139,69,19,0.12);
+            }
+
+            .profile-btn i {
+                font-size: 15px;
+            }
+
+        /* Hamburger (mobile) */
+        .navbar-toggler-custom {
+            background: none;
+            border: 1.5px solid #D4956A;
+            border-radius: 8px;
+            color: #8B4513;
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+            display: none;
+        }
+
+        @@media (max-width: 640px) {
+            .navbar-toggler-custom
+
+        {
+            display: flex;
+            align-items: center;
+        }
+
+        .site-navbar-links, .site-navbar-right {
+            display: none;
+        }
+
+            .site-navbar-links.open, .site-navbar-right.open {
+                display: flex;
+            }
+
+        .site-navbar {
+            flex-wrap: wrap;
+            height: auto;
+            padding: .75rem 1rem;
+            gap: .5rem;
+        }
+
+        .site-navbar-links {
+            flex-direction: column;
+            width: 100%;
+            padding-bottom: .5rem;
+        }
+
+            .site-navbar-links .site-nav-link {
+                width: 100%;
+            }
+
+        }
+
+        /* ── ALERTS ── */
+        .layout-alerts {
+            max-width: 720px;
+            margin: 1rem auto 0;
+            padding: 0 1rem;
+        }
+
+        .layout-alert {
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 13.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .layout-alert-success {
+            background: rgba(92,122,78,0.10);
+            border: 1px solid rgba(92,122,78,0.25);
+            color: #3B5030;
+        }
+
+        .layout-alert-danger {
+            background: rgba(176,58,46,0.08);
+            border: 1px solid rgba(176,58,46,0.22);
+            color: #8B2219;
+        }
+
+        .layout-alert-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            opacity: .5;
+            color: inherit;
+            line-height: 1;
+        }
+
+            .layout-alert-close:hover {
+                opacity: 1;
+            }
+
+        /* ── MAIN CONTENT ── */
+        .site-main {
+            flex: 1;
+            padding-bottom: 80px;
+        }
+
+        /* ── FOOTER ── */
+        .site-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #FFFDF8;
+            border-top: 1px solid #E8DFD0;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .site-footer span {
+                font-size: 12px;
+                color: #A89880;
+                font-family: 'Lora', serif;
+                font-style: italic;
+            }
+
+        /* ── MODALS ── */
+        .modal-content {
+            border: 1px solid #E8DFD0;
+            border-radius: 16px;
+            background: #FFFDF8;
+            box-shadow: 0 8px 40px rgba(44,36,22,0.14);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #E8DFD0;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .modal-title {
+            font-family: 'Lora', serif;
+            font-size: 17px;
+            font-weight: 600;
+            color: #2C2416;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #E8DFD0;
+        }
+
+        /* Profile modal action buttons */
+        .modal-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            width: 100%;
+            cursor: pointer;
+            transition: background .15s;
+            text-decoration: none;
+            border: 1.5px solid;
+        }
+
+            .modal-action-btn.secondary {
+                color: #6B5744;
+                border-color: #D4C5B0;
+                background: transparent;
+            }
+
+                .modal-action-btn.secondary:hover {
+                    background: rgba(139,69,19,0.06);
+                    color: #2C2416;
+                    text-decoration: none;
+                }
+
+            .modal-action-btn.danger {
+                color: #B03A2E;
+                border-color: rgba(176,58,46,0.30);
+                background: transparent;
+            }
+
+                .modal-action-btn.danger:hover {
+                    background: rgba(176,58,46,0.06);
+                    color: #B03A2E;
+                }
+
+        /* Pill tabs */
+        .modal .nav-pills .nav-link {
+            color: #6B5744;
+            font-size: 13px;
+            border-radius: 8px;
+            padding: 6px 14px;
+        }
+
+            .modal .nav-pills .nav-link.active {
+                background: #8B4513;
+                color: #FFF8F0;
+            }
+
+        /* Form inputs inside modals */
+        .modal .form-control {
+            border: 1.5px solid #E8DFD0;
+            border-radius: 9px;
+            background: #FAF7F2;
+            color: #2C2416;
+            font-size: 13.5px;
+            padding: 9px 13px;
+            transition: border-color .15s, box-shadow .15s;
+        }
+
+            .modal .form-control:focus {
+                border-color: #D4956A;
+                box-shadow: 0 0 0 3px rgba(139,69,19,0.10);
+                background: #FFFDF8;
+                outline: none;
+            }
+
+        .modal .form-label {
+            font-size: 12.5px;
+            font-weight: 500;
+            color: #6B5744;
+            margin-bottom: 5px;
+        }
+
+        /* Submit button inside modal */
+        .modal .btn-primary {
+            background: #8B4513;
+            border: none;
+            border-radius: 9px;
+            font-family: 'Lora', serif;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px;
+            color: #FFF8F0;
+            transition: background .18s, transform .15s, box-shadow .18s;
+        }
+
+            .modal .btn-primary:hover {
+                background: #7A3B10;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 14px rgba(139,69,19,0.28);
+            }
+
+        /* Logout confirm modal */
+        .modal .btn-secondary {
+            background: transparent;
+            border: 1.5px solid #D4C5B0;
+            color: #6B5744;
+            border-radius: 9px;
+            font-size: 13.5px;
+            font-weight: 500;
+        }
+
+            .modal .btn-secondary:hover {
+                background: rgba(139,69,19,0.06);
+                color: #2C2416;
+                border-color: #C4A882;
+            }
+
+        .modal .btn-danger {
+            background: transparent;
+            border: 1.5px solid rgba(176,58,46,0.35);
+            color: #B03A2E;
+            border-radius: 9px;
+            font-size: 13.5px;
+            font-weight: 500;
+        }
+
+            .modal .btn-danger:hover {
+                background: rgba(176,58,46,0.08);
+                color: #B03A2E;
+                border-color: rgba(176,58,46,0.5);
+            }
+
+        /* Inline alerts inside modals */
+        .modal .alert-danger {
+            background: rgba(176,58,46,0.08);
+            border: 1px solid rgba(176,58,46,0.22);
+            color: #8B2219;
+            border-radius: 8px;
+            font-size: 13px;
+            padding: 10px 14px;
+        }
+
+        .modal .alert-success {
+            background: rgba(92,122,78,0.10);
+            border: 1px solid rgba(92,122,78,0.25);
+            color: #3B5030;
+            border-radius: 8px;
+            font-size: 13px;
+            padding: 10px 14px;
+        }
+
+        /* Modal backdrop tint */
+        .modal-backdrop.show {
+            opacity: .35;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── NAVBAR ── -->
+    <nav class="site-navbar">
+        <a class="site-navbar-brand" href="/">
+            <div class="site-navbar-brand-icon">📖</div>
+            <span class="site-navbar-brand-name">Günlüğüm</span>
+        </a>
+
+        <button class="navbar-toggler-custom" onclick="toggleMobileNav()" aria-label="Menü">
+            <i class="bi bi-list"></i>
+        </button>
+
+        @if (Context.Session.GetString("UserId") != null)
+        {
+            <div class="site-navbar-links" id="navLinks">
+                <a class="site-nav-link" asp-controller="Journal" asp-action="Index">
+                    <i class="bi bi-journal-bookmark"></i> Günlüklerim
+                </a>
+                <a class="site-nav-link" asp-controller="Folder" asp-action="Index">
+                    <i class="bi bi-folder2"></i> Klasörler
+                </a>
+                <a class="site-nav-link" asp-controller="Journal" asp-action="Create">
+                    <i class="bi bi-plus-circle"></i> Yeni Entry
+                </a>
+            </div>
+
+            <div class="site-navbar-right" id="navRight">
+                <button class="profile-btn" data-bs-toggle="modal" data-bs-target="#profileModal">
+                    <i class="bi bi-person-circle"></i>
+                    @Context.Session.GetString("Username")
+                </button>
+            </div>
+        }
+    </nav>
+
+    <!-- ── FLASH MESSAGES ── -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="layout-alerts">
+            <div class="layout-alert layout-alert-success">
+                <i class="bi bi-check-circle-fill"></i>
+                @TempData["SuccessMessage"]
+                <button class="layout-alert-close" onclick="this.parentElement.remove()">×</button>
+            </div>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="layout-alerts">
+            <div class="layout-alert layout-alert-danger">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                @TempData["ErrorMessage"]
+                <button class="layout-alert-close" onclick="this.parentElement.remove()">×</button>
+            </div>
+        </div>
+    }
+
+    <!-- ── MAIN ── -->
+    <main class="site-main">
+        @RenderBody()
+    </main>
+
+    <!-- ── FOOTER ── -->
+    <footer class="site-footer">
+        <span>&copy; @DateTime.Now.Year — Akıllı Fotoğraf Günlüğü</span>
+    </footer>
+
+    <!-- ── PROFİL MODAL ── -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width:360px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Profil İşlemleri</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div class="d-grid gap-2">
+                        <button class="modal-action-btn secondary"
+                                data-bs-toggle="modal" data-bs-target="#settingsModal">
+                            <i class="bi bi-gear"></i> Profil Ayarları
+                        </button>
+                        <a asp-controller="Journal" asp-action="AllEntries"
+                           class="modal-action-btn secondary">
+                            <i class="bi bi-journal-text"></i> Tüm Günlüklerim
+                        </a>
+                        <a asp-controller="Journal" asp-action="Search"
+                           class="modal-action-btn secondary">
+                            <i class="bi bi-search"></i> Günlük Ara
+                        </a>
+                        <button class="modal-action-btn danger" onclick="confirmLogout()">
+                            <i class="bi bi-box-arrow-right"></i> Çıkış Yap
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── AYARLAR MODAL ── -->
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width:400px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Profil Ayarları</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <ul class="nav nav-pills mb-3 d-flex justify-content-center" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pills-user-tab"
+                                    data-bs-toggle="pill" data-bs-target="#pills-user">
+                                İsim Değiştir
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-pass-tab"
+                                    data-bs-toggle="pill" data-bs-target="#pills-pass">
+                                Şifre Değiştir
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="pills-tabContent">
+                        <!-- İsim -->
+                        <div class="tab-pane fade show active" id="pills-user">
+                            <div id="usernameError" class="alert alert-danger d-none mb-3"></div>
+                            <div id="usernameSuccess" class="alert alert-success d-none mb-3"></div>
+                            <div class="mb-3">
+                                <label class="form-label">Yeni Kullanıcı Adı</label>
+                                <input type="text" id="newUsernameInput" class="form-control"
+                                       placeholder="En az 3 karakter" required minlength="3" />
+                            </div>
+                            <button type="button" onclick="submitUsername()" class="btn btn-primary w-100">Güncelle</button>
+                        </div>
+
+                        <!-- Şifre -->
+                        <div class="tab-pane fade" id="pills-pass">
+                            <div id="passwordError" class="alert alert-danger d-none mb-3"></div>
+                            <div id="passwordSuccess" class="alert alert-success d-none mb-3"></div>
+                            <div class="mb-3">
+                                <label class="form-label">Mevcut Şifre</label>
+                                <input type="password" id="oldPasswordInput" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Yeni Şifre</label>
+                                <input type="password" id="newPasswordInput" class="form-control"
+                                       required minlength="4" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Yeni Şifre (Tekrar)</label>
+                                <input type="password" id="confirmNewPasswordInput" class="form-control"
+                                       required minlength="4" />
+                            </div>
+                            <button type="button" onclick="submitPassword()" class="btn btn-primary w-100">Şifreyi Güncelle</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── ÇIKIŞ ONAY MODAL ── -->
+    <div class="modal fade" id="logoutConfirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4 px-4">
+                    <div style="font-size:32px; margin-bottom:12px;">👋</div>
+                    <p style="font-family:'Lora',serif; font-size:15px; color:#2C2416; margin-bottom:6px;">Çıkış yapmak istiyor musun?</p>
+                    <p style="font-size:12px; color:#A89880; margin:0;">Anıların seni bekliyor olacak.</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center gap-2 pb-4 pt-0">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">İptal</button>
+                    <a href="@Url.Action("Logout", "Account")" class="btn btn-danger px-4">Çıkış Yap</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleMobileNav() {
+            document.getElementById('navLinks')?.classList.toggle('open');
+            document.getElementById('navRight')?.classList.toggle('open');
+        }
+
+        function confirmLogout() {
+            var pm = bootstrap.Modal.getInstance(document.getElementById('profileModal'));
+            if (pm) pm.hide();
+            setTimeout(() => {
+                new bootstrap.Modal(document.getElementById('logoutConfirmModal')).show();
+            }, 200);
+        }
+
+        function submitUsername() {
+            const newName = document.getElementById('newUsernameInput').value;
+            const errorDiv = document.getElementById('usernameError');
+            const successDiv = document.getElementById('usernameSuccess');
+            errorDiv.classList.add('d-none');
+            successDiv.classList.add('d-none');
+
+            fetch('/Account/UpdateUsername', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'newUsername=' + encodeURIComponent(newName)
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) { window.location.reload(); }
+                else { errorDiv.textContent = data.message; errorDiv.classList.remove('d-none'); }
+            })
+            .catch(() => { errorDiv.textContent = "Bir hata oluştu."; errorDiv.classList.remove('d-none'); });
+        }
+
+        function submitPassword() {
+            const oldPass = document.getElementById('oldPasswordInput').value;
+            const newPass = document.getElementById('newPasswordInput').value;
+            const confirmNewPass = document.getElementById('confirmNewPasswordInput').value;
+            const errorDiv = document.getElementById('passwordError');
+            const successDiv = document.getElementById('passwordSuccess');
+            errorDiv.classList.add('d-none');
+            successDiv.classList.add('d-none');
+
+            if (!oldPass || !newPass || !confirmNewPass) {
+                errorDiv.textContent = "Lütfen tüm alanları doldurun.";
+                errorDiv.classList.remove('d-none'); return;
+            }
+            if (newPass !== confirmNewPass) {
+                errorDiv.textContent = "Yeni şifreler birbiriyle eşleşmiyor.";
+                errorDiv.classList.remove('d-none'); return;
+            }
+
+            fetch('/Account/UpdatePassword', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `oldPassword=${encodeURIComponent(oldPass)}&newPassword=${encodeURIComponent(newPass)}&confirmNewPassword=${encodeURIComponent(confirmNewPass)}`
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) { window.location.reload(); }
+                else { errorDiv.textContent = data.message; errorDiv.classList.remove('d-none'); }
+            })
+            .catch(() => { errorDiv.textContent = "Bağlantı hatası oluştu."; errorDiv.classList.remove('d-none'); });
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

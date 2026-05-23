@@ -1,0 +1,263 @@
+﻿@{
+    ViewData["Title"] = "Anasayfa";
+}
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@@0,400;0,600;1,400&family=DM+Sans:wght@@300;400;500&display=swap');
+
+    .home-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #FAF7F2;
+        padding: 2.5rem;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    .home-card {
+        background: #FFFDF8;
+        border: 1px solid #E8DFD0;
+        border-radius: 18px;
+        width: 100%;
+        max-width: 420px;
+        overflow: hidden;
+        box-shadow: 0 2px 16px rgba(44, 36, 22, 0.08);
+    }
+
+    .home-card-top {
+        padding: 2rem 2rem 1.75rem;
+        border-bottom: 1px solid #E8DFD0;
+        text-align: center;
+    }
+
+    .home-brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 1.75rem;
+    }
+
+    .home-brand-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: rgba(139, 69, 19, 0.10);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    .home-brand-name {
+        font-family: 'Lora', serif;
+        font-size: 18px;
+        font-weight: 600;
+        color: #2C2416;
+    }
+
+    .home-card-top h1 {
+        font-family: 'Lora', serif;
+        font-size: 24px;
+        font-weight: 400;
+        font-style: italic;
+        color: #2C2416;
+        margin: 0 0 8px;
+        line-height: 1.3;
+    }
+
+    .home-card-top p {
+        font-size: 13px;
+        color: #A89880;
+        margin: 0;
+    }
+
+    .home-card-body {
+        padding: 1.75rem 2rem 2rem;
+    }
+
+    .home-alert {
+        background: rgba(92, 122, 78, 0.10);
+        border: 1px solid rgba(92, 122, 78, 0.22);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .home-alert-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #5C7A4E;
+        flex-shrink: 0;
+    }
+
+    .home-alert-text {
+        font-size: 13px;
+        color: #3B5030;
+    }
+
+    .home-alert-name {
+        font-weight: 500;
+    }
+
+    .btn-home-primary {
+        display: block;
+        width: 100%;
+        height: 42px;
+        background: #8B4513;
+        color: #FFF8F0;
+        border: none;
+        border-radius: 10px;
+        font-family: 'Lora', serif;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        line-height: 42px;
+        text-decoration: none;
+        transition: background .18s, transform .15s, box-shadow .18s;
+        margin-bottom: 10px;
+    }
+
+        .btn-home-primary:hover {
+            background: #7A3B10;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(139, 69, 19, 0.28);
+            color: #FFF8F0;
+            text-decoration: none;
+        }
+
+    .btn-home-outline {
+        display: block;
+        width: 100%;
+        height: 40px;
+        line-height: 38px;
+        text-align: center;
+        background: transparent;
+        color: #8B4513;
+        border: 1.5px solid #D4956A;
+        border-radius: 10px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background .15s;
+    }
+
+        .btn-home-outline:hover {
+            background: rgba(139, 69, 19, 0.07);
+            color: #8B4513;
+            text-decoration: none;
+        }
+
+    .btn-home-danger {
+        display: block;
+        width: 100%;
+        height: 42px;
+        background: transparent;
+        color: #B03A2E;
+        border: 1.5px solid rgba(176, 58, 46, 0.35);
+        border-radius: 10px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        text-align: center;
+        line-height: 38px;
+        text-decoration: none;
+        margin-top: 10px;
+        transition: background .15s;
+    }
+
+        .btn-home-danger:hover {
+            background: rgba(176, 58, 46, 0.06);
+            color: #B03A2E;
+            text-decoration: none;
+        }
+
+    .home-divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 1.25rem 0;
+    }
+
+        .home-divider hr {
+            flex: 1;
+            border: none;
+            border-top: 1px solid #E8DFD0;
+            margin: 0;
+        }
+
+        .home-divider span {
+            font-size: 12px;
+            color: #A89880;
+            white-space: nowrap;
+        }
+
+    .home-quote {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid #E8DFD0;
+    }
+
+        .home-quote p {
+            font-family: 'Lora', serif;
+            font-size: 12px;
+            font-style: italic;
+            color: #A89880;
+            line-height: 1.6;
+            margin: 0;
+        }
+</style>
+
+<div class="home-page">
+    <div class="home-card">
+        <div class="home-card-top">
+            <div class="home-brand">
+                <div class="home-brand-icon">📖</div>
+                <span class="home-brand-name">Günlüğüm</span>
+            </div>
+            <h1>Akıllı Fotoğraf Günlüğü</h1>
+            <p>Fotoğraflarınızla anılarınızı kaydedin ve yaşatın</p>
+        </div>
+
+        <div class="home-card-body">
+            @if (Context.Session.GetString("UserId") != null)
+            {
+                <div class="home-alert">
+                    <div class="home-alert-dot"></div>
+                    <span class="home-alert-text">
+                        Hoş geldin, <span class="home-alert-name">@Context.Session.GetString("Username")</span> 👋
+                    </span>
+                </div>
+
+                <a href="/Account/Logout" class="btn-home-danger">Çıkış yap</a>
+
+                <div class="home-quote">
+                    <p>"Her fotoğraf, bir anın sessiz şahididir."</p>
+                </div>
+            }
+            else
+            {
+                <a href="/Account/Login" class="btn-home-primary">Giriş yap</a>
+
+                <div class="home-divider">
+                    <hr /><span>ilk kez mi geldin?</span><hr />
+                </div>
+
+                <a href="/Account/Register" class="btn-home-outline">Hesap oluştur</a>
+
+                <div class="home-quote">
+                    <p>"Her yolculuk ilk adımla başlar."</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,358 @@
+﻿@model deneme2._0.Models.JournalEntry
+@{
+    ViewData["Title"] = "Yeni Günlük";
+}
+
+<style>
+    .create-page {
+        min-height: 80vh;
+        background: #FAF7F2;
+        padding: 2rem 1rem 4rem;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    .create-container {
+        max-width: 680px;
+        margin: 0 auto;
+    }
+
+    .create-header {
+        margin-bottom: 1.75rem;
+    }
+
+    .create-header-label {
+        font-size: 11.5px;
+        font-weight: 500;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: #A89880;
+        margin-bottom: 6px;
+    }
+
+    .create-header h2 {
+        font-family: 'Lora', serif;
+        font-size: 26px;
+        font-weight: 400;
+        font-style: italic;
+        color: #2C2416;
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .create-card {
+        background: #FFFDF8;
+        border: 1px solid #E8DFD0;
+        border-radius: 18px;
+        padding: 2rem;
+        box-shadow: 0 2px 16px rgba(44,36,22,0.07);
+    }
+
+    .create-field {
+        margin-bottom: 1.5rem;
+    }
+
+    .create-label {
+        display: block;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: #6B5744;
+        margin-bottom: 6px;
+        letter-spacing: .01em;
+    }
+
+    .create-input,
+    .create-textarea {
+        width: 100%;
+        background: #FAF7F2;
+        border: 1.5px solid #E8DFD0;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 14px;
+        color: #2C2416;
+        transition: border-color .15s, box-shadow .15s;
+        outline: none;
+    }
+
+        .create-input:focus,
+        .create-textarea:focus {
+            border-color: #D4956A;
+            box-shadow: 0 0 0 3px rgba(139,69,19,0.10);
+            background: #FFFDF8;
+        }
+
+    .create-textarea {
+        resize: vertical;
+        min-height: 240px;
+        line-height: 1.7;
+    }
+
+    .create-file-zone {
+        border: 1.5px dashed #D4C5B0;
+        border-radius: 12px;
+        background: #FAF7F2;
+        padding: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color .15s, background .15s;
+        position: relative;
+    }
+
+        .create-file-zone:hover,
+        .create-file-zone.dragover {
+            border-color: #D4956A;
+            background: rgba(139,69,19,0.04);
+        }
+
+        .create-file-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+    .create-file-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+
+    .create-file-label {
+        font-size: 13.5px;
+        color: #6B5744;
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
+
+    .create-file-hint {
+        font-size: 12px;
+        color: #A89880;
+    }
+
+    .create-file-selected {
+        margin-top: 10px;
+        font-size: 12.5px;
+        color: #5C7A4E;
+        font-weight: 500;
+    }
+
+    .create-validation {
+        font-size: 12px;
+        color: #B03A2E;
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .create-divider {
+        border: none;
+        border-top: 1px solid #E8DFD0;
+        margin: 1.75rem 0 1.5rem;
+    }
+
+    .create-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-create-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        height: 42px;
+        padding: 0 22px;
+        background: #8B4513;
+        color: #FFF8F0;
+        border: none;
+        border-radius: 10px;
+        font-family: 'Lora', serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background .18s, transform .15s, box-shadow .18s;
+    }
+
+        .btn-create-primary:hover {
+            background: #7A3B10;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(139,69,19,0.28);
+            color: #FFF8F0;
+            text-decoration: none;
+        }
+
+    .btn-create-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        height: 40px;
+        padding: 0 18px;
+        background: transparent;
+        color: #6B5744;
+        border: 1.5px solid #D4C5B0;
+        border-radius: 10px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background .15s;
+    }
+
+        .btn-create-secondary:hover {
+            background: rgba(139,69,19,0.06);
+            color: #2C2416;
+            text-decoration: none;
+        }
+</style>
+
+<div class="create-page">
+    <div class="create-container">
+
+        <div class="create-header">
+            <p class="create-header-label">✍️ Yeni Entry</p>
+            @if (Model.CreatedAt.Date == DateTime.Today)
+            {
+                <h2>Bugün İçin Yeni Günlük</h2>
+            }
+            else
+            {
+                <h2>@Model.CreatedAt.ToString("dd MMMM yyyy") İçin Yeni Günlük</h2>
+            }
+        </div>
+
+        <div class="create-card">
+            <form asp-action="Create" method="post" enctype="multipart/form-data" id="createForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="createdAtStr" value="@Model.CreatedAt.ToString("yyyy-MM-dd")" />
+
+                @if (ViewData.ModelState.ErrorCount > 0)
+                {
+                    <div class="create-validation mb-3" style="font-size:13px;">
+                        <i class="bi bi-exclamation-circle-fill"></i>
+                        <span asp-validation-summary="ModelOnly"></span>
+                    </div>
+                }
+
+                <!-- Başlık -->
+                <div class="create-field">
+                    <label asp-for="Title" class="create-label">Başlık</label>
+                    <input asp-for="Title" class="create-input" placeholder="Bu anıya bir başlık ver…" />
+                    <span asp-validation-for="Title" class="create-validation"></span>
+                </div>
+
+                <!-- İçerik -->
+                <div class="create-field">
+                    <label asp-for="Content" class="create-label">Günlük</label>
+                    <textarea asp-for="Content" class="create-textarea" id="editor"
+                              placeholder="Bugün neler hissettin, neler yaşadın?…"></textarea>
+                    <span asp-validation-for="Content" class="create-validation"></span>
+                </div>
+
+                <!-- Fotoğraflar -->
+                <div class="create-field">
+                    <label class="create-label">Fotoğraflar</label>
+                    <div class="create-file-zone" id="dropZone">
+                        <input type="file"
+                               name="imageFiles"
+                               accept="image/*"
+                               multiple
+                               required
+                               id="fileInput"
+                               onchange="updateFileLabel(this)" />
+                        <div class="create-file-icon">🖼️</div>
+                        <p class="create-file-label">Fotoğraf seç veya buraya sürükle</p>
+                        <p class="create-file-hint">Ctrl / Shift ile birden çok seçebilirsin · En az 1 fotoğraf</p>
+                        <p class="create-file-selected" id="fileLabel" style="display:none;"></p>
+                    </div>
+                </div>
+
+                <!-- Klasör Seçimi -->
+                @{
+                    var allFolders = ViewBag.AllFolders as List<deneme2._0.Models.Folder> ?? new();
+                }
+                @if (allFolders.Any())
+                {
+                    <div class="create-field">
+                        <label class="create-label">📁 Klasör Seç <span style="color:#A89880; font-weight:400;">(isteğe bağlı)</span></label>
+                        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;">
+                            @foreach (var folder in allFolders)
+                            {
+                                <label style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px;
+                                    border-radius:20px; border:1.5px solid #E8DFD0; background:#F3EDE3;
+                                    color:#6B5E4A; font-size:13px; cursor:pointer; transition:all 0.15s;"
+                                       onmouseover="this.style.borderColor='#D4956A'"
+                                       onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E8DFD0'">
+                                    <input type="checkbox" name="folderIds" value="@folder.Id"
+                                           style="display:none;"
+                                           onchange="updateFolderTag(this)" />
+                                    @folder.Emoji @folder.Name
+                                </label>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <hr class="create-divider" />
+
+                <div class="create-actions">
+                    <button type="submit" class="btn-create-primary">
+                        <i class="bi bi-check2"></i> Kaydet
+                    </button>
+                    <a asp-action="Index" class="btn-create-secondary">
+                        <i class="bi bi-x"></i> İptal
+                    </a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function updateFileLabel(input) {
+            const label = document.getElementById('fileLabel');
+            if (input.files && input.files.length > 0) {
+                label.style.display = 'block';
+                label.textContent = input.files.length === 1
+                    ? `✓ ${input.files[0].name}`
+                    : `✓ ${input.files.length} fotoğraf seçildi`;
+            } else {
+                label.style.display = 'none';
+            }
+        }
+
+                function updateFolderTag(checkbox) {
+            const label = checkbox.closest('label');
+            if (checkbox.checked) {
+                label.style.borderColor = '#8B4513';
+                label.style.background = 'rgba(139,69,19,0.12)';
+                label.style.color = '#8B4513';
+            } else {
+                label.style.borderColor = '#E8DFD0';
+                label.style.background = '#F3EDE3';
+                label.style.color = '#6B5E4A';
+            }
+        }
+
+
+        const dropZone = document.getElementById('dropZone');
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const fi = document.getElementById('fileInput');
+            fi.files = e.dataTransfer.files;
+            updateFileLabel(fi);
+        });
+    </script>
+
+
+}

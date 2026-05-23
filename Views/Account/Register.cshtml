@@ -1,0 +1,291 @@
+﻿@model deneme2._0.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Kayıt Ol";
+}
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@@0,400;0,600;1,400&family=DM+Sans:wght@@300;400;500&display=swap');
+
+    .register-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #FAF7F2;
+        padding: 2.5rem;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    .register-card {
+        background: #FFFDF8;
+        border: 1px solid #E8DFD0;
+        border-radius: 18px;
+        width: 100%;
+        max-width: 400px;
+        overflow: hidden;
+        box-shadow: 0 2px 16px rgba(44, 36, 22, 0.08);
+    }
+
+    .register-card-top {
+        padding: 2rem 2rem 1.5rem;
+        border-bottom: 1px solid #E8DFD0;
+    }
+
+    .register-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 1.5rem;
+    }
+
+    .register-brand-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: rgba(139, 69, 19, 0.10);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .register-brand-name {
+        font-family: 'Lora', serif;
+        font-size: 16px;
+        font-weight: 600;
+        color: #2C2416;
+    }
+
+    .register-card-top h1 {
+        font-family: 'Lora', serif;
+        font-size: 22px;
+        font-weight: 400;
+        font-style: italic;
+        color: #2C2416;
+        margin: 0 0 5px;
+        line-height: 1.3;
+    }
+
+    .register-card-top p {
+        font-size: 13px;
+        color: #A89880;
+        margin: 0;
+    }
+
+    .register-card-body {
+        padding: 1.5rem 2rem 2rem;
+    }
+
+    .register-field {
+        margin-bottom: 1rem;
+    }
+
+        .register-field label {
+            display: block;
+            font-size: 11px;
+            font-weight: 500;
+            color: #6B5E4A;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .register-field .form-control {
+            height: 40px;
+            padding: 0 13px;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            background: #F3EDE3;
+            border: 1px solid #E8DFD0;
+            border-radius: 9px;
+            color: #2C2416;
+            transition: border-color .15s, box-shadow .15s, background .15s;
+        }
+
+            .register-field .form-control:focus {
+                background: #FFFDF8;
+                border-color: #D4956A;
+                box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.10);
+                outline: none;
+            }
+
+    .field-hint {
+        font-size: 11px;
+        color: #A89880;
+        margin-top: 5px;
+        margin-bottom: 0;
+    }
+
+    .strength-bar {
+        height: 3px;
+        border-radius: 2px;
+        background: #E8DFD0;
+        margin-top: 6px;
+        overflow: hidden;
+    }
+
+    .strength-fill {
+        height: 100%;
+        width: 0%;
+        border-radius: 2px;
+        background: #D4956A;
+        transition: width .3s ease, background .3s ease;
+    }
+
+    .btn-register {
+        width: 100%;
+        height: 42px;
+        background: #8B4513;
+        color: #FFF8F0;
+        border: none;
+        border-radius: 10px;
+        font-family: 'Lora', serif;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background .18s, transform .15s, box-shadow .18s;
+        margin-top: 0.25rem;
+    }
+
+        .btn-register:hover {
+            background: #7A3B10;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(139, 69, 19, 0.28);
+        }
+
+    .register-divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 1.25rem 0;
+    }
+
+        .register-divider hr {
+            flex: 1;
+            border: none;
+            border-top: 1px solid #E8DFD0;
+            margin: 0;
+        }
+
+        .register-divider span {
+            font-size: 12px;
+            color: #A89880;
+            white-space: nowrap;
+        }
+
+    .btn-login-link {
+        display: block;
+        width: 100%;
+        height: 40px;
+        line-height: 38px;
+        text-align: center;
+        background: transparent;
+        color: #8B4513;
+        border: 1.5px solid #D4956A;
+        border-radius: 10px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background .15s;
+    }
+
+        .btn-login-link:hover {
+            background: rgba(139, 69, 19, 0.07);
+            color: #8B4513;
+            text-decoration: none;
+        }
+
+    .register-quote {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid #E8DFD0;
+    }
+
+        .register-quote p {
+            font-family: 'Lora', serif;
+            font-size: 12px;
+            font-style: italic;
+            color: #A89880;
+            line-height: 1.6;
+            margin: 0;
+        }
+</style>
+
+<div class="register-page">
+    <div class="register-card">
+        <div class="register-card-top">
+            <div class="register-brand">
+                <div class="register-brand-icon">📖</div>
+                <span class="register-brand-name">Günlüğüm</span>
+            </div>
+            <h1>Yeni bir sayfa aç</h1>
+            <p>Günlüğüne başlamak için hesap oluştur</p>
+        </div>
+
+        <div class="register-card-body">
+            <form asp-action="Register" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" style="font-size:13px;"></div>
+
+                <div class="register-field">
+                    <label asp-for="Username"></label>
+                    <input asp-for="Username" class="form-control" placeholder="kullanici_adi" />
+                    <p class="field-hint">Profilinde görünecek isim</p>
+                    <span asp-validation-for="Username" class="text-danger" style="font-size:12px;"></span>
+                </div>
+
+                <div class="register-field">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" class="form-control" type="password"
+                           placeholder="••••••••" id="passwordInput"
+                           oninput="updateStrength(this.value)" />
+                    <div class="strength-bar">
+                        <div class="strength-fill" id="strengthFill"></div>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger" style="font-size:12px;"></span>
+                </div>
+
+                <div class="register-field">
+                    <label asp-for="ConfirmPassword"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" type="password"
+                           placeholder="••••••••" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger" style="font-size:12px;"></span>
+                </div>
+
+                <button type="submit" class="btn-register">Hesap Oluştur</button>
+            </form>
+
+            <div class="register-divider">
+                <hr /><span>zaten hesabın var mı?</span><hr />
+            </div>
+
+            <a asp-action="Login" class="btn-login-link">Giriş yap</a>
+
+            <div class="register-quote">
+                <p>"Her yolculuk ilk adımla başlar."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function updateStrength(val) {
+            var fill = document.getElementById('strengthFill');
+            var len = val.length;
+            var width, color;
+            if (len === 0)       { width = '0%';   color = '#E8DFD0'; }
+            else if (len < 6)    { width = '25%';  color = '#D4956A'; }
+            else if (len < 10)   { width = '55%';  color = '#C47A30'; }
+            else if (len < 14)   { width = '75%';  color = '#8B6914'; }
+            else                 { width = '100%'; color = '#5C7A4E'; }
+            fill.style.width = width;
+            fill.style.background = color;
+        }
+    </script>
+}

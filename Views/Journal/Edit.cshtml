@@ -1,0 +1,525 @@
+﻿@model deneme2._0.Models.JournalEntry
+
+@{
+    ViewData["Title"] = "Günlük Düzenle";
+}
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@@0,400;0,600;1,400&family=DM+Sans:wght@@300;400;500&display=swap');
+
+    :root {
+        --ink: #2C2416;
+        --ink-soft: #6B5E4A;
+        --ink-faint: #A89880;
+        --paper: #FAF7F2;
+        --paper-warm: #F3EDE3;
+        --paper-crease: #E8DFD0;
+        --accent: #8B4513;
+        --accent-light: #D4956A;
+        --accent-glow: rgba(139, 69, 19, 0.12);
+        --danger: #9B2020;
+        --danger-light: rgba(155, 32, 32, 0.1);
+        --shadow-soft: 0 2px 16px rgba(44, 36, 22, 0.08);
+        --shadow-lift: 0 6px 28px rgba(44, 36, 22, 0.14);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: var(--paper);
+        font-family: 'DM Sans', sans-serif;
+        color: var(--ink);
+    }
+
+    .edit-wrapper {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 4px 48px;
+    }
+
+    /* ── PAGE HEADER ── */
+    .edit-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .edit-title {
+        font-family: 'Lora', serif;
+        font-size: 26px;
+        font-weight: 600;
+        color: var(--ink);
+        margin: 0;
+    }
+
+    .edit-subtitle {
+        font-size: 13px;
+        color: var(--ink-faint);
+        margin: 4px 0 0;
+    }
+
+    .divider-line {
+        height: 1px;
+        background: linear-gradient(to right, var(--paper-crease), transparent);
+        margin: 16px 0 28px;
+    }
+
+    /* ── FORM CARD ── */
+    .form-card {
+        background: #FFFDF8;
+        border: 1px solid var(--paper-crease);
+        border-radius: 18px;
+        padding: 28px 32px;
+        box-shadow: var(--shadow-soft);
+        margin-bottom: 16px;
+    }
+
+    .form-section-label {
+        font-family: 'Lora', serif;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        margin: 0 0 8px;
+        display: block;
+    }
+
+    .field-group {
+        margin-bottom: 22px;
+    }
+
+        .field-group:last-child {
+            margin-bottom: 0;
+        }
+
+    .journal-input {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1px solid var(--paper-crease);
+        border-radius: 10px;
+        background: var(--paper);
+        font-family: 'DM Sans', sans-serif;
+        font-size: 15px;
+        color: var(--ink);
+        transition: border-color 0.18s, box-shadow 0.18s;
+        outline: none;
+    }
+
+        .journal-input:focus {
+            border-color: var(--accent-light);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+            background: #FFFDF8;
+        }
+
+        .journal-input::placeholder {
+            color: var(--ink-faint);
+        }
+
+    textarea.journal-input {
+        resize: vertical;
+        min-height: 240px;
+        line-height: 1.7;
+        font-size: 14.5px;
+    }
+
+    .validation-msg {
+        font-size: 12px;
+        color: var(--danger);
+        margin-top: 5px;
+        display: block;
+    }
+
+    /* ── EXISTING PHOTOS ── */
+    .photos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+        margin-top: 4px;
+    }
+
+    .photo-item {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid var(--paper-crease);
+        aspect-ratio: 1;
+    }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.2s;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.04);
+        }
+
+    .photo-delete-btn {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        background: rgba(44, 36, 22, 0.7);
+        color: #FFF8F0;
+        border: none;
+        border-radius: 7px;
+        padding: 5px 10px;
+        font-size: 11px;
+        font-family: 'DM Sans', sans-serif;
+        cursor: pointer;
+        transition: background 0.15s;
+        backdrop-filter: blur(4px);
+    }
+
+        .photo-delete-btn:hover {
+            background: var(--danger);
+        }
+
+    /* ── FILE INPUT ── */
+    .file-input-wrap {
+        position: relative;
+        border: 1.5px dashed var(--paper-crease);
+        border-radius: 10px;
+        background: var(--paper);
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.18s, background 0.18s;
+    }
+
+        .file-input-wrap:hover {
+            border-color: var(--accent-light);
+            background: var(--accent-glow);
+        }
+
+        .file-input-wrap input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+    .file-input-icon {
+        font-size: 28px;
+        display: block;
+        margin-bottom: 6px;
+        opacity: 0.5;
+    }
+
+    .file-input-hint {
+        font-size: 13px;
+        color: var(--ink-faint);
+    }
+
+        .file-input-hint strong {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+    /* ── ACTION BUTTONS ── */
+    .action-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13.5px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.18s ease;
+        border: 1px solid transparent;
+        text-decoration: none;
+    }
+
+    .btn-save {
+        background: var(--accent);
+        color: #FFF8F0;
+    }
+
+        .btn-save:hover {
+            background: #7A3B10;
+            box-shadow: 0 4px 14px rgba(139,69,19,0.3);
+            transform: translateY(-1px);
+            color: #FFF8F0;
+        }
+
+    .btn-cancel {
+        background: var(--paper-warm);
+        color: var(--ink-soft);
+        border-color: var(--paper-crease);
+    }
+
+        .btn-cancel:hover {
+            background: var(--paper-crease);
+            color: var(--ink);
+        }
+
+    .btn-delete {
+        background: transparent;
+        color: var(--danger);
+        border-color: rgba(155, 32, 32, 0.3);
+        margin-left: auto;
+    }
+
+        .btn-delete:hover {
+            background: var(--danger-light);
+        }
+
+    /* ── MODALS ── */
+    .modal-content {
+        background: #FFFDF8;
+        border: 1px solid var(--paper-crease);
+        border-radius: 18px;
+        box-shadow: var(--shadow-lift);
+    }
+
+    .modal-header {
+        border-bottom: 1px solid var(--paper-crease);
+        padding: 18px 24px;
+    }
+
+    .modal-title-text {
+        font-family: 'Lora', serif;
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--ink);
+    }
+
+    .modal-body {
+        padding: 20px 24px;
+        font-size: 14px;
+        color: var(--ink-soft);
+        line-height: 1.6;
+    }
+
+    .modal-footer {
+        border-top: 1px solid var(--paper-crease);
+        padding: 14px 24px;
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+    }
+
+    .modal-header.danger-header {
+        background: var(--danger-light);
+        border-bottom-color: rgba(155,32,32,0.15);
+    }
+
+    .modal-title-text.danger {
+        color: var(--danger);
+    }
+</style>
+
+<div class="edit-wrapper">
+
+    <div class="edit-header">
+        <div>
+            <h2 class="edit-title">Günlüğü Düzenle</h2>
+            <p class="edit-subtitle">@Model.CreatedAt.ToString("dd MMMM yyyy")</p>
+        </div>
+    </div>
+
+    <div class="divider-line"></div>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data" id="editForm">
+        <div asp-validation-summary="ModelOnly" class="validation-msg" style="margin-bottom:16px;"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="UserId" />
+        <input type="hidden" asp-for="CreatedAt" />
+
+        <!-- Başlık & İçerik -->
+        <div class="form-card">
+            <div class="field-group">
+                <label class="form-section-label" asp-for="Title">Başlık</label>
+                <input asp-for="Title" class="journal-input" placeholder="Günlüğüne bir başlık ver…" />
+                <span asp-validation-for="Title" class="validation-msg"></span>
+            </div>
+
+            <div class="field-group">
+                <label class="form-section-label" asp-for="Content">İçerik</label>
+                <textarea asp-for="Content" class="journal-input" id="editor"
+                          placeholder="Bugün neler hissettin, neler düşündün…"></textarea>
+                <span asp-validation-for="Content" class="validation-msg"></span>
+            </div>
+        </div>
+
+        <!-- Mevcut Fotoğraflar -->
+        @if (Model.Images != null && Model.Images.Any())
+        {
+            <div class="form-card">
+                <label class="form-section-label">Mevcut Fotoğraflar</label>
+                <div class="photos-grid">
+                    @foreach (var image in Model.Images)
+                    {
+                        <div class="photo-item">
+                            <img src="data:@image.ImageContentType;base64,@Convert.ToBase64String(image.ImageData)"
+                                 alt="Günlük fotoğrafı" />
+                            <button type="button" class="photo-delete-btn"
+                                    onclick="showModal('deleteImageModal', @image.Id)">
+                                Sil
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <!-- Yeni Fotoğraf Ekle -->
+        <div class="form-card">
+            <label class="form-section-label">Fotoğraf Ekle</label>
+            <div class="file-input-wrap">
+                <input type="file" name="imageFiles" accept="image/*" multiple />
+                <span class="file-input-icon">🖼️</span>
+                <p class="file-input-hint">
+                    <strong>Dosya seç</strong> veya buraya sürükle<br>
+                    PNG, JPG, WEBP — birden fazla seçebilirsin
+                </p>
+            </div>
+        </div>
+
+        <!-- Klasör Seçimi -->
+        @{
+            var allFolders = ViewBag.AllFolders as List<deneme2._0.Models.Folder> ?? new();
+            var entryFolderIds = ViewBag.EntryFolderIds as List<int> ?? new();
+        }
+        @if (allFolders.Any())
+        {
+            <div class="form-card">
+                <label class="form-section-label">📁 Klasörler</label>
+                <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;">
+                    @foreach (var folder in allFolders)
+                    {
+                        var isChecked = entryFolderIds.Contains(folder.Id);
+                        <label style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px;
+                            border-radius:20px; border:1.5px solid @(isChecked ? "#8B4513" : "#E8DFD0");
+                            background:@(isChecked ? "rgba(139,69,19,0.12)" : "#F3EDE3");
+                            color:@(isChecked ? "#8B4513" : "#6B5E4A"); font-size:13px; cursor:pointer;">
+                            <input type="checkbox" name="folderIds" value="@folder.Id"
+                            @(isChecked ? "checked" : "")
+                                   style="display:none;"
+                                   onchange="updateFolderTag(this)" />
+                            @folder.Emoji @folder.Name
+                        </label>
+                    }
+                </div>
+            </div>
+        }
+
+        <!-- Aksiyonlar -->
+        <div class="action-row">
+            <button type="button" class="btn-action btn-save" onclick="showModal('updateModal')">
+                Kaydet
+            </button>
+            <button type="button" class="btn-action btn-cancel" onclick="showModal('cancelModal')">
+                İptal
+            </button>
+            <button type="button" class="btn-action btn-delete" onclick="showModal('deleteModal')">
+                Günlüğü Sil
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<!-- MODAL: KAYDET -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title-text">Değişiklikleri Kaydet</span>
+            </div>
+            <div class="modal-body">Yaptığın değişiklikler kaydedilsin mi?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn-action btn-cancel" data-bs-dismiss="modal">Vazgeç</button>
+                <button type="button" class="btn-action btn-save" onclick="submitEditForm()">Evet, Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: İPTAL -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title-text">Düzenlemeyi Bırak</span>
+            </div>
+            <div class="modal-body">Kaydedilmemiş değişiklikler kaybolacak. Çıkmak istiyor musun?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn-action btn-cancel" data-bs-dismiss="modal">Geri Dön</button>
+                <a href="@Url.Action("Index")" class="btn-action btn-delete">Evet, Çık</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: SİL -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header danger-header">
+                <span class="modal-title-text danger">Günlüğü Sil</span>
+            </div>
+            <div class="modal-body">
+                Bu günlüğü kalıcı olarak silmek istediğine emin misin?
+                Bu işlem <strong style="color:var(--danger)">geri alınamaz.</strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-action btn-cancel" data-bs-dismiss="modal">Vazgeç</button>
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post" style="margin:0;">
+                    <button type="submit" class="btn-action btn-save" style="background:var(--danger);">
+                        Evet, Sil
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function showModal(modalId) {
+            new bootstrap.Modal(document.getElementById(modalId)).show();
+        }
+        function submitEditForm() {
+            document.getElementById('editForm').submit();
+        }
+
+            function updateFolderTag(checkbox) {
+        const label = checkbox.closest('label');
+        if (checkbox.checked) {
+        label.style.borderColor = '#8B4513';
+        label.style.background = 'rgba(139,69,19,0.12)';
+        label.style.color = '#8B4513';
+        } else {
+        label.style.borderColor = '#E8DFD0';
+        label.style.background = '#F3EDE3';
+        label.style.color = '#6B5E4A';
+        }
+        }
+
+    </script>
+
+    
+}

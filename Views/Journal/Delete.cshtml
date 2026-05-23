@@ -1,0 +1,24 @@
+﻿@model deneme2._0.Models.JournalEntry
+
+@{
+    ViewData["Title"] = "Günlük Sil";
+}
+
+<h2>Günlük Sil</h2>
+<div class="alert alert-danger">
+    <h3>Bu günlük entry'sini silmek istediğinizden emin misiniz?</h3>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h4>@Model.Title</h4>
+        <p>@(Model.Content.Length > 200 ? Model.Content.Substring(0, 200) + "..." : Model.Content)</p>
+        <small class="text-muted">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
+    </div>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Evet, Sil</button>
+    <a asp-action="Index" class="btn btn-secondary">Hayır, Listeye Dön</a>
+</form>

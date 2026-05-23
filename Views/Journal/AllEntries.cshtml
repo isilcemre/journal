@@ -1,0 +1,358 @@
+﻿@model IEnumerable<deneme2._0.Models.JournalEntry>
+@{
+    ViewData["Title"] = "Tüm Günlüklerim";
+}
+@using System.Linq
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@@0,400;0,600;1,400&family=DM+Sans:wght@@300;400;500&display=swap');
+
+    :root {
+        --ink: #2C2416;
+        --ink-soft: #6B5E4A;
+        --ink-faint: #A89880;
+        --paper: #FAF7F2;
+        --paper-warm: #F3EDE3;
+        --paper-crease: #E8DFD0;
+        --accent: #8B4513;
+        --accent-light: #D4956A;
+        --accent-glow: rgba(139, 69, 19, 0.12);
+        --radius: 12px;
+        --shadow-soft: 0 2px 16px rgba(44, 36, 22, 0.08);
+        --shadow-lift: 0 6px 28px rgba(44, 36, 22, 0.14);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: var(--paper);
+        font-family: 'DM Sans', sans-serif;
+        color: var(--ink);
+    }
+
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .page-title {
+        font-family: 'Lora', serif;
+        font-size: 28px;
+        font-weight: 600;
+        color: var(--ink);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .entry-count-badge {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--ink-faint);
+        background: var(--paper-warm);
+        border: 1px solid var(--paper-crease);
+        padding: 3px 10px;
+        border-radius: 20px;
+        vertical-align: middle;
+    }
+
+    .divider-line {
+        height: 1px;
+        background: linear-gradient(to right, var(--paper-crease), transparent);
+        margin: 18px 0 28px;
+    }
+
+    .btn-add {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 18px;
+        border-radius: 10px;
+        background: var(--accent);
+        color: #FFF8F0;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.18s ease;
+        border: none;
+    }
+
+        .btn-add:hover {
+            background: #7A3B10;
+            box-shadow: 0 4px 14px rgba(139,69,19,0.3);
+            transform: translateY(-1px);
+            color: #FFF8F0;
+        }
+
+    /* ── ENTRY CARD ── */
+    .entry-card {
+        display: flex;
+        background: #FFFDF8;
+        border: 1px solid var(--paper-crease);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 14px;
+        box-shadow: var(--shadow-soft);
+        transition: all 0.2s ease;
+        position: relative;
+        height: 140px;
+    }
+
+        .entry-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent-light);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .entry-card:hover {
+            box-shadow: var(--shadow-lift);
+            transform: translateY(-2px);
+            border-color: var(--accent-light);
+        }
+
+            .entry-card:hover::before {
+                opacity: 1;
+            }
+
+    .entry-thumb-wrap {
+        width: 150px;
+        min-width: 150px;
+        height: 140px;
+        overflow: hidden;
+        background: var(--paper-warm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-right: 1px solid var(--paper-crease);
+    }
+
+        .entry-thumb-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+    .entry-thumb-placeholder {
+        font-size: 32px;
+        opacity: 0.4;
+    }
+
+    .entry-body {
+        padding: 16px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .entry-meta {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11.5px;
+        color: var(--ink-faint);
+        margin-bottom: 6px;
+        letter-spacing: 0.3px;
+    }
+
+    .meta-dot {
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: var(--paper-crease);
+    }
+
+    .entry-title {
+        font-family: 'Lora', serif;
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--ink);
+        margin: 0 0 6px;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .entry-preview {
+        font-size: 13px;
+        color: var(--ink-soft);
+        line-height: 1.55;
+        margin: 0 0 12px;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .entry-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-sm {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 13px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.15s ease;
+        border: 1px solid transparent;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-detail {
+        background: var(--paper-warm);
+        color: var(--ink-soft);
+        border-color: var(--paper-crease);
+    }
+
+        .btn-detail:hover {
+            background: var(--paper-crease);
+            color: var(--ink);
+        }
+
+    .btn-edit {
+        background: transparent;
+        color: var(--accent);
+        border-color: var(--accent-light);
+    }
+
+        .btn-edit:hover {
+            background: var(--accent-glow);
+            color: var(--accent);
+        }
+
+    /* Empty state */
+    .empty-state {
+        background: #FFFDF8;
+        border: 1.5px dashed var(--paper-crease);
+        border-radius: 16px;
+        padding: 64px 32px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        font-size: 48px;
+        margin-bottom: 14px;
+        opacity: 0.45;
+        display: block;
+    }
+
+    .empty-state h4 {
+        font-family: 'Lora', serif;
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        margin: 0 0 8px;
+    }
+
+    .empty-state p {
+        font-size: 14px;
+        color: var(--ink-faint);
+        margin: 0 0 28px;
+    }
+
+    @@media (max-width: 600px) {
+        .entry-thumb-wrap {
+            width: 90px;
+            min-width: 90px;
+        }
+
+        .entry-title {
+            font-size: 15px;
+        }
+    }
+</style>
+
+<div class="container mt-5" style="max-width: 860px;">
+
+    <div class="page-header">
+        <h2 class="page-title">
+            Günlüklerim
+            @if (Model != null && Model.Any())
+            {
+                <span class="entry-count-badge">@Model.Count() kayıt</span>
+            }
+        </h2>
+        <a asp-controller="Journal" asp-action="Create" class="btn-add">
+            + Yeni Günlük Ekle
+        </a>
+    </div>
+
+    <div class="divider-line"></div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="empty-state">
+            <span class="empty-icon">📖</span>
+            <h4>Henüz hiç günlük yok</h4>
+            <p>İlk günlüğünü ekleyerek başla.</p>
+            <a asp-controller="Journal" asp-action="Create" class="btn-add">
+                + Yeni Günlük Ekle
+            </a>
+        </div>
+    }
+    else
+    {
+        foreach (var entry in Model.OrderByDescending(x => x.CreatedAt))
+        {
+            <div class="entry-card">
+                <div class="entry-thumb-wrap">
+                    @if (entry.Images != null && entry.Images.Any())
+                    {
+                        <img src="data:@entry.Images.First().ImageContentType;base64,@Convert.ToBase64String(entry.Images.First().ImageData)"
+                             alt="Günlük fotoğrafı" />
+                    }
+                    else
+                    {
+                        <span class="entry-thumb-placeholder">✍️</span>
+                    }
+                </div>
+
+                <div class="entry-body">
+                    <div>
+                        <div class="entry-meta">
+                            <span>@entry.CreatedAt.ToString("dd MMMM yyyy")</span>
+                            <span class="meta-dot"></span>
+                            
+                        </div>
+                        <h5 class="entry-title">@entry.Title</h5>
+                        @if (!string.IsNullOrWhiteSpace(entry.Content))
+                        {
+                            <p class="entry-preview">
+                                @(entry.Content.Length > 100 ? entry.Content.Substring(0, 100) + "…" : entry.Content)
+                            </p>
+                        }
+                    </div>
+                    <div class="entry-actions">
+                        <a asp-action="Details" asp-route-id="@entry.Id" class="btn-sm btn-detail">Oku</a>
+                        <a asp-action="Edit" asp-route-id="@entry.Id" class="btn-sm btn-edit">Düzenle</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+</div>
